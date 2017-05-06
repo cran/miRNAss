@@ -1,0 +1,157 @@
+%\VignetteIndexEntry{miRNAss usage}
+%\VignettePackage{miRNAss}
+
+\documentclass[a4paper,11pt]{article}
+
+\usepackage{authblk}
+\renewcommand\Affilfont{\itshape\small}
+\usepackage{Sweave}
+\usepackage{hyperref}
+
+\textwidth=6.2in
+\textheight=8.5in
+\parskip=.3cm
+\oddsidemargin=.1in
+\evensidemargin=.1in
+\headheight=-.3in
+
+\newcommand{\Rpackage}[1]{\textit{#1}}
+
+\begin{document}
+\SweaveOpts{concordance=TRUE}
+%------------------------------------------------------------
+\title{\Rpackage{miRNAss}: Genome-wide pre-miRNA discovery from few labeled 
+examples}
+%------------------------------------------------------------
+\author[1]{Cristian A. Yones (\url{cyones@sinc.unl.edu.ar})}
+\author[1]{Georgina Stegmayer}
+\author[1]{Diego H. Milone}
+
+\affil[1]{Research Institute for Signals, Systems and Computational
+Intelligence, sinc(\textit{i}), FICH-UNL, CONICET, Santa Fe (3000), Argentina.}
+
+\SweaveOpts{echo = TRUE, useFancyQuotes = FALSE, highlight=TRUE, tidy=TRUE, keep.space=TRUE, keep.blank.space=FALSE, keep.comment=TRUE}
+
+
+\maketitle
+
+\abstract{
+MiRNAss is a machine learning method specifically designed for pre-miRNA
+prediction. It takes advantage of unlabeled sequences to improve the prediction
+rates even when there are just a few positive examples, and when the negative
+examples are unreliable or are not good representatives of its class.
+Furthermore, the method can automatically search for negative examples if the
+user is unable to provide them. MiRNAss can find a good boundary to divide the
+pre-miRNAs from other groups of sequences; it automatically optimizes the
+threshold that defines the classes boundaries, and thus, it is robust to high
+class imbalance. Each step of the method is scalable and can handle large
+volumes of data.
+
+The last version of the package can be found at Bioconductor. Also, the
+development version of the package can be found at:
+\url{https://github.com/cyones/miRNAss}.
+
+Other related projects can be found in \url{http://fich.unl.edu.ar/sinc/}
+}
+
+\section{Usage}
+After install the package, load miRNAss with the following command:
+
+<<loadPackages,results=hide>>=
+library('miRNAss')
+@
+
+The following command is the simplest way to execute miRNAss:
+
+<<loadPackages,eval=FALSE>>=
+miRNAss(features, labels)
+@
+
+Where:
+\begin{itemize}
+\item \textbf{features}: is a data frame with the features extracted from
+hairpyn sequences, one sequence per row and one numeric feature per column.
+The hairpin sequences can be extracted from a raw genome using HExtractor
+(\url{https://sourceforge.net/projects/sourcesinc/files/hextractor/}),
+and the features can be calculated using miRNAfe
+(\url{https://sourceforge.net/projects/sourcesinc/files/mirnafe/} or
+\url{http://fich.unl.edu.ar/sinc/blog/web-demo/mirnafe-full/}). The whole
+pipeline consist on extract the hairpins from a raw genome in fasta format.
+The output, also in fasta format is the input to miRNAfe, which as result gives
+a comma separate file that can be easily load into R.
+\item \textbf{labels}: is a numeric vector where the i-th element has a value
+of 1 if it is a well-known pre-miRNA, a -1 if it is not a pre-miRNA, and zero
+if it is an unknown sequence that has to be classified (predicted) by
+the method.
+\end{itemize}
+
+The data provided with the package can be used to test miRNAss. This small
+dataset is composed of a small set of features extracted from 1000 hairpins
+randomly extracted from C. elegans hairpins. To use miRNAss with this dataset,
+first construct the label vector with the CLASS column
+
+<<setY>>=
+y = as.numeric(celegans$CLASS)*2 - 1
+@
+
+Remove some labels to make a test
+<<sampleY>>=
+y[sample(which(y > 0),200)] = 0
+y[sample(which(y < 0),700)] = 0
+@
+
+Take all the features but remove the label column
+<<removeLabels>>=
+x = subset(celegans, select = -CLASS)
+@
+
+Call miRNAss with default parameters
+<<miRNAssCall>>=
+p = miRNAss(x,y)
+@
+
+Calculate some performance measures
+<<performance>>=
+SE = mean(p[ celegans$CLASS & y == 0] > 0)
+SP = mean(p[!celegans$CLASS & y == 0] < 0)
+cat('Sensitivity: ', SE, '\nSpecificity: ', SP, '\n')
+@
+
+For more help about all the parameters and a full example execute:
+<<loadPackages,results=hide>>=
+help(miRNAss)
+@
+
+\section{Extra datasets and test scripts}
+A set of experiments and comparisons with other methods can be done. The
+scripts and the data of these experiments are contained in the file
+miRNAss-experiments.zip that can be found in:
+
+\url{https://sourceforge.net/projects/sourcesinc/files/mirnass/}
+
+To run these tests, after unzip the file, set this directory as the working
+directory and simply run each script with the function 'source':
+
+<<loadPackages,eval=FALSE>>=
+setwd('experiment_scripts')
+source('2_delta-mirBase.R')
+@
+
+This will generate one csv file for each test in the 'results' folder. It is
+important to point that most of these experiments are computationally expensive
+and could take quite a while (about 40 minutes for the experiment
+2 in an intel i7 PC). You can plot the results executing:
+
+<<loadPackages,eval=FALSE>>=
+source('plotResults.R')
+@
+
+The figures will be saved in the folder 'results'.
+
+\section{Software used}
+
+<<sessionInfo, echo=FALSE, results=tex>>=
+toLatex(sessionInfo())
+@
+
+\end{document}

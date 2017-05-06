@@ -1,0 +1,20 @@
+News for package miRNAss
+------------------------
+
+* Changes in miRNAss 0.99 (2017-02-17)
+    + First version of the package
+* Changes in miRNAss 0.99.1 (2017-03-23)
+    + Automatic build of vignettes when the package is build
+* Changes in miRNAss 0.99.2 (2017-03-23)
+    + Vignettes expanded
+    + OpenMP desactivated on Mac OS.
+* Changes in miRNAss 0.99.3 (2017-03-23)
+    + Resolved some warnings in c++ code.
+* Changes in miRNAss 0.99.7 (2017-03-31)
+    + Move the vignettes from markdown to Latex
+* Changes in miRNAss 0.99.8 (2017-04-07)
+    + More descriptive argument names
+    + Replaced 1:n expressions with seq function
+    + Removed garbage collections
+    + Change the '=' for '<-'
+    + Added a description to the main function
