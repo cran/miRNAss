@@ -2,12 +2,12 @@
 % Please edit documentation in R/miRNAss.R
 \name{miRNAss}
 \alias{miRNAss}
-\title{MiRNAss}
+\title{MiRNAss: Genome-wide pre-miRNA discovery from few labeled examples}
 \usage{
 miRNAss(sequenceFeatures = NULL, sequenceLabels, AdjMatrix = NULL,
-  nEigenVectors = min(400, round(length(sequenceLabels)/5)),
   nNearestNeighbor = 10, missPenalization = 1, scallingMethod = "relief",
-  positiveProp = NULL, neg2label = 0.05, thresholdObjective = "Gm",
+  thresholdObjective = "Gm", neg2label = 0.05, positiveProp = NULL,
+  nEigenVectors = min(400, round(length(sequenceLabels)/5)),
   threadNumber = NA)
 }
 \arguments{
@@ -19,12 +19,7 @@ have -1 for negative examples, 1 for known miRNAs and zero for the unknown
 sequences (the ones that would be classificated).}
 
 \item{AdjMatrix}{Sparse adjacency matrix representeing the graph.
-If sequence features are provided it is not required.}
-
-\item{nEigenVectors}{Number of eigen vectors used to aproximate the solution
-of the optimization problem. If the number is too low, smoother topographic
-solutions are founded, probabily losing SP but achieving a better SE.
-Generally, 400 are enought.}
+If sequence features are provided it is ignored.}
 
 \item{nNearestNeighbor}{Number of nearest neighbors in the KNN graph. The
 default value is 10.}
@@ -39,19 +34,24 @@ option). The first option does nothing, the second calls the built-in
 function 'scale' and the last one uses the ReliefFexpRank algorithm from
 the coreLearn package.}
 
-\item{positiveProp}{Expected proportion of positive sequences. If it is not
-provided by the user, is estimated as sum(y > 0) / sum(y != 0) when there
-are negative examples or as 2 * sum(y > 0) / sum(y == 0) when not.}
-
-\item{neg2label}{Proportion of unlabeled stem-loops that would be labeled as
-negative with the automatic method to start the classification algorithm.
-The default is 0.05.}
-
 \item{thresholdObjective}{Performance measure that would be optimized when
 estimating the threshold. The options are 'Gm' (geometric mean of the SE and
 the SP), 'G' (geometric mean of the SE and the precision), 'F1' (harmonic
 mean between SE and the precision) and 'none' (do not calculate any
 threshold). The default value is 'Gm'.}
+
+\item{neg2label}{Proportion of unlabeled stem-loops that would be labeled as
+negative with the automatic method to start the classification algorithm.
+The default is 0.05.}
+
+\item{positiveProp}{Expected proportion of positive sequences. If it is not
+provided by the user, is estimated as sum(y > 0) / sum(y != 0) when there
+are negative examples or as 2 * sum(y > 0) / sum(y == 0) when not.}
+
+\item{nEigenVectors}{Number of eigen vectors used to aproximate the solution
+of the optimization problem. If the number is too low, smoother topographic
+solutions are founded, probabily losing SP but achieving a better SE.
+Generally, 400 are enought.}
 
 \item{threadNumber}{Number of threads used for the calculations. If it is NA
 leave OpenMP decide the number (may vary across different platforms).}

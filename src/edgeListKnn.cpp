@@ -117,7 +117,7 @@ NumericMatrix edge_list_knn(const matrix& x, const std::vector<double>& y,
 {
 
 #ifndef __APPLE__
-	std::vector<edge> e(ceil(nn*nrow/omp_get_num_threads()) + nn*nrow);
+	std::vector<edge> e(nn*nrow/omp_get_num_threads() + nn*nrow);
 #else
 	std::vector<edge> e(2*nn*nrow);
 #endif

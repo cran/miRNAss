@@ -26,13 +26,13 @@ double calcThreshold(const NumericVector& ye, const NumericVector& yt, int objec
     }
     sort(y.begin(), y.end());
 
-    double obj, best=0, TP=npos, TN=0;
+    double obj, SE, Pr, best=0, TP=npos, TN=0;
     int lbest=-1, rbest=-1;
-    if(objective == 0) { // Gm
+    if(objective == 1) { // Gm
         for(i=0; i<y.size()-1; i++) {
             if(y[i].second) TP--;
             else TN++;
-            obj = TP / npos * TN / nneg;
+            obj = sqrt(TP / npos * TN / nneg);
             if(obj > best) {
                 lbest=i; rbest=i+1;
                 best = obj;
@@ -40,24 +40,14 @@ double calcThreshold(const NumericVector& ye, const NumericVector& yt, int objec
             else if (obj == best)
                 rbest=i;
         }
-    } else if(objective==1) { // G
+    }
+    else if(objective == 2) { // G
         for(i=0; i<y.size()-1; i++) {
             if(y[i].second) TP--;
             else TN++;
-            obj = TP / npos * TP / (y.size()-i-1);
-            if(obj > best) {
-                lbest=i; rbest=i+1;
-                best = obj;
-            }
-            else if(obj == best)
-                rbest=i;
-        }
-    } else if(objective==2) { // F1
-        for(i=0; i<y.size()-1; i++) {
-            if(y[i].second) TP--;
-            else TN++;
-//             obj = 2 * TP / (2 * TP + (nneg - TN) + (npos - TP) );
-            obj = 2 * TP / (TP - TN + y.size());
+            SE = TP / npos;
+            Pr = TP / (y.size()-i-1);
+            obj= sqrt(SE * Pr);
             if(obj > best) {
                 lbest=i; rbest=i+1;
                 best = obj;
@@ -66,6 +56,22 @@ double calcThreshold(const NumericVector& ye, const NumericVector& yt, int objec
                 rbest=i;
         }
     }
+    else if(objective == 3) { // F1
+        for(i=0; i<y.size()-1; i++) {
+            if(y[i].second) TP--;
+            else TN++;
+            SE = TP / npos;
+            Pr = TP / (y.size()-i-1);
+            obj= 2 * SE * Pr / (SE + Pr);
+            if(obj > best) {
+                lbest=i; rbest=i+1;
+                best = obj;
+            }
+            else if(obj == best)
+                rbest=i;
+        }
+    }
+
     return (y[lbest].first + y[rbest].first) / 2.0;
 }
 

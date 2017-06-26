@@ -1,4 +1,4 @@
-#' MiRNAss
+#' MiRNAss: Genome-wide pre-miRNA discovery from few labeled examples
 #'
 #' This is the main function of the miRNAss package and implements the miRNA
 #' prediction method, It takes as main parameters a matrix with numerical
@@ -12,7 +12,7 @@
 #'  have -1 for negative examples, 1 for known miRNAs and zero for the unknown
 #'  sequences (the ones that would be classificated).
 #' @param AdjMatrix Sparse adjacency matrix representeing the graph.
-#' If sequence features are provided it is not required.
+#' If sequence features are provided it is ignored.
 #' @param nEigenVectors Number of eigen vectors used to aproximate the solution
 #' of the optimization problem. If the number is too low, smoother topographic
 #' solutions are founded, probabily losing SP but achieving a better SE.
@@ -74,10 +74,10 @@
 #' @useDynLib miRNAss
 #' @export
 miRNAss =  function(sequenceFeatures = NULL, sequenceLabels, AdjMatrix = NULL,
-                    nEigenVectors = min(400, round(length(sequenceLabels) / 5)),
                     nNearestNeighbor = 10, missPenalization = 1,
-                    scallingMethod = "relief", positiveProp = NULL,
-                    neg2label = 0.05, thresholdObjective = "Gm",
+                    scallingMethod = "relief", thresholdObjective = "Gm",
+                    neg2label = 0.05, positiveProp = NULL,
+                    nEigenVectors = min(400, round(length(sequenceLabels) / 5)),
                     threadNumber = NA) {
     nx <- length(sequenceLabels)
     nEigenVectors <- min(nEigenVectors, round(nx / 2))
@@ -88,47 +88,49 @@ miRNAss =  function(sequenceFeatures = NULL, sequenceLabels, AdjMatrix = NULL,
             positiveProp <- sum(sequenceLabels > 0) / sum(sequenceLabels != 0)
     } else {
         if (is.null(positiveProp))
-            positiveProp <- 2 * sum(sequenceLabels > 0) / sum(sequenceLabels == 0)
-        if (scallingMethod == "relief") {
-            warning( paste0("Relief cannot be used without negative ",
-                            "examples, switching to whitening"))
-            scallingMethod <- "whitening"
-        }
+            positiveProp <- 2 * sum(sequenceLabels > 0) / length(sequenceLabels)
+
     }
 
-    A = {}
     if (!is.null(sequenceFeatures)) {
-        if (scallingMethod == "relief")
-            sequenceFeatures <- .reliefScalling(x = sequenceFeatures,
-                                                y = sequenceLabels,
-                                                nn = nNearestNeighbor)
-        else if (scallingMethod == "whitening")
+        if (scallingMethod == "relief") {
+            if (!any(sequenceLabels < 0)) {
+                warning( paste0("Relief cannot be used without negative ",
+                                "examples, switching to whitening"))
+                sequenceFeatures <- scale(sequenceFeatures)
+            } else {
+                sequenceFeatures <- .reliefScalling(x = sequenceFeatures,
+                                                    y = sequenceLabels,
+                                                    nn = nNearestNeighbor)
+            }
+        } else if (scallingMethod == "whitening") {
             sequenceFeatures <- scale(sequenceFeatures)
-        else if (scallingMethod != "none")
+        }
+        else if (scallingMethod != "none") {
             stop("Invalid scalling method")
-        A <- .adjacencyMatrixKNN(x = sequenceFeatures, y = sequenceLabels,
-                                 nn = nNearestNeighbor,
-                                 threadNumber = threadNumber)
-    } else if (!is.null(AdjMatrix)) {
-        A <- AdjMatrix
-    } else
+        }
+
+        AdjMatrix <- .adjacencyMatrixKNN(x = sequenceFeatures,
+                                         y = sequenceLabels,
+                                         nn = nNearestNeighbor,
+                                         threadNumber = threadNumber)
+    } else if (is.null(AdjMatrix))
         stop("Either sequenceFeatures or AdjMatrix must be provided.")
 
-    desc <- .eigenDecom(A, nEigenVectors)
+    eigenVectors <- .eigenDecom(AdjMatrix, nEigenVectors)
 
     if (!any(sequenceLabels < 0))
-        sequenceLabels <- .searchNegatives(
-            A = A,
-            y = sequenceLabels,
-            posFrac = positiveProp,
-            prop2label = neg2label
-        )
+        sequenceLabels <- .searchNegatives(A = AdjMatrix,
+                                           y = sequenceLabels,
+                                           posFrac = positiveProp,
+                                           prop2label = neg2label)
 
-    pred <- .solveOptim(desc, sequenceLabels, positiveProp, missPenalization)
+    pred <- .solveOptim(eigenVectors, sequenceLabels,
+                        positiveProp, missPenalization)
 
-    thresholdObjective = which(thresholdObjective == c("Gm", "G", "F1"))
-    if (length(thresholdObjective) > 0)
-        pred <- pred - .calcThreshold(pred, sequenceLabels, thresholdObjective)
+    thresNumber = which(thresholdObjective == c("Gm", "G", "F1"))
+    if (length(thresNumber) > 0)
+        pred <- pred - .calcThreshold(pred, sequenceLabels, thresNumber)
 
     pos <- pred > 0
     pred[pos] <- pred[pos] / abs(max(pred[pos]))

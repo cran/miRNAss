@@ -20,15 +20,15 @@
 \begin{document}
 \SweaveOpts{concordance=TRUE}
 %------------------------------------------------------------
-\title{\Rpackage{miRNAss}: Genome-wide pre-miRNA discovery from few labeled 
-examples}
+\title{\textbf{MiRNAss user guide} \\
+{\Large Genome-wide pre-miRNA discovery from few labeled examples}}
 %------------------------------------------------------------
 \author[1]{Cristian A. Yones (\url{cyones@sinc.unl.edu.ar})}
 \author[1]{Georgina Stegmayer}
 \author[1]{Diego H. Milone}
 
 \affil[1]{Research Institute for Signals, Systems and Computational
-Intelligence, sinc(\textit{i}), FICH-UNL, CONICET, Santa Fe (3000), Argentina.}
+Intelligence, sinc(\textit{i}), FICH-UNL, CONICET, Santa Fe, Argentina.}
 
 \SweaveOpts{echo = TRUE, useFancyQuotes = FALSE, highlight=TRUE, tidy=TRUE, keep.space=TRUE, keep.blank.space=FALSE, keep.comment=TRUE}
 
@@ -46,13 +46,28 @@ pre-miRNAs from other groups of sequences; it automatically optimizes the
 threshold that defines the classes boundaries, and thus, it is robust to high
 class imbalance. Each step of the method is scalable and can handle large
 volumes of data.
-
 The last version of the package can be found at Bioconductor. Also, the
 development version of the package can be found at:
 \url{https://github.com/cyones/miRNAss}.
-
-Other related projects can be found in \url{http://fich.unl.edu.ar/sinc/}
+Related projects can be found in \url{http://fich.unl.edu.ar/sinc/}
 }
+
+\section{Input data}
+MiRNAss receive as input numerical features extracted from hairpin sequences.
+This means that a genome needs to be pre-proccesed to be able to make
+predictions with miRNAss. There are two steps: split the genome-wide data in
+shorter sequences and extract features from this sequences. The first step can
+be accomplished with \textit{HExtractor}
+(\url{https://sourceforge.net/projects/sourcesinc/files/hextractor/}), which is
+a tool specifically designed for this task. For the feature extraction we have
+developed a comprehensive tool of feature extraction called \textit{miRNAfe}
+\url{http://fich.unl.edu.ar/sinc/blog/web-demo/mirnafe-full/} that
+is able of calculate almost all the features used in the state-of-the-art
+prediction methods. For further details see Yones
+\textit{et. al.}, 2015 \footnote{Yones, C. A., Stegmayer, G., Kamenetzky, L., \&
+Milone, D. H. (2015). miRNAfe: A comprehensive tool for feature extraction in
+microRNA prediction. \textit{Biosystems}, \textbf{138}, 1-5.}.
+
 
 \section{Usage}
 After install the package, load miRNAss with the following command:
