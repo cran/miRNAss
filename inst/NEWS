@@ -18,3 +18,9 @@ News for package miRNAss
     + Removed garbage collections
     + Change the '=' for '<-'
     + Added a description to the main function
+* Changes in miRNAss 1.0 (2017-06-01)
+    + Added F-measure to the objective measures.
+* Changes in miRNAss 1.1 (2017-06-26)
+    + Pre-computed adjacency matrix can be provided as parameter.
+* Changes in miRNAss 1.2 (2017-07-03)
+    + Minor corrections.

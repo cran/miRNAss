@@ -39,7 +39,13 @@ p = miRNAss(x,y)
 
 
 ###################################################
-### code chunk number 7: performance
+### code chunk number 7: predictions
+###################################################
+is.miRNA = which(p > 0)
+
+
+###################################################
+### code chunk number 8: performance
 ###################################################
 SE = mean(p[ celegans$CLASS & y == 0] > 0)
 SP = mean(p[!celegans$CLASS & y == 0] < 0)
@@ -47,26 +53,26 @@ cat('Sensitivity: ', SE, '\nSpecificity: ', SP, '\n')
 
 
 ###################################################
-### code chunk number 8: loadPackages
+### code chunk number 9: loadPackages
 ###################################################
 help(miRNAss)
 
 
 ###################################################
-### code chunk number 9: loadPackages (eval = FALSE)
+### code chunk number 10: loadPackages (eval = FALSE)
 ###################################################
 ## setwd('experiment_scripts')
-## source('2_delta-mirBase.R')
+## source('2-delta_mirBase.R')
 
 
 ###################################################
-### code chunk number 10: loadPackages (eval = FALSE)
+### code chunk number 11: loadPackages (eval = FALSE)
 ###################################################
 ## source('plotResults.R')
 
 
 ###################################################
-### code chunk number 11: sessionInfo
+### code chunk number 12: sessionInfo
 ###################################################
 toLatex(sessionInfo())
 

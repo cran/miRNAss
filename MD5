@@ -1,15 +1,15 @@
-19164a43456cb06e6413593af0214230 *DESCRIPTION
+1437a6d1f908b10706a03908b70e8de6 *DESCRIPTION
 449c3ea505cd0779a505a66729c2c5d3 *NAMESPACE
 04d8116993757e035d643967cb288691 *R/RcppExports.R
 6d10f89be671f17022a8a1d1b6866f0d *R/celegans.R
 1344316ca9c79e0620731772cad3732a *R/miRNAss.R
-41f2a418acdf404525cec6396f3d7f2e *README.md
+4b86ecb894fc2c1f4e1c1558275eeddc *README.md
 f83eae057b59d3d11c775ac1da08f13a *build/vignette.rds
 40c01684943401d9011abd47d16b4efe *data/celegans.rda
-aa7ffa3534e9a7e1142e3a52eb2ef40c *inst/NEWS
-a96b878c5253069050110bb26344bc5c *inst/doc/miRNAss.R
-e0fdf49f3b09f1d792146b029de5f4db *inst/doc/miRNAss.Rnw
-944587e8a77b5160508e125b49f104fd *inst/doc/miRNAss.pdf
+b600ad9904dbcab5e072b29030e736b5 *inst/NEWS
+72d0f18d388778f90c477196699bdfae *inst/doc/miRNAss.R
+e6bf0b831966c214fa58ef43c19a4253 *inst/doc/miRNAss.Rnw
+bf59b068f714e9b716478b111c8f5564 *inst/doc/miRNAss.pdf
 5ba125b3bf521c998a9ca8b2daaf456c *man/celegans.Rd
 69a6c409c9f249e130a74ba1d70e601a *man/miRNAss.Rd
 06f6370c7a4f8a1089bae20cdd9470f1 *src/Makevars
@@ -18,4 +18,4 @@ bfaf77b8543596eeb01a745de06d1ffa *src/calcDistance.cpp
 28c8b721b3f00abdf2ba7f9324f03697 *src/calcThreshold.cpp
 93fbc00859acc7adf580ff99930f0861 *src/edgeListKnn.cpp
 53c4cced3647872ee929f17e8a40c163 *src/miRNAss_init.c
-e0fdf49f3b09f1d792146b029de5f4db *vignettes/miRNAss.Rnw
+e6bf0b831966c214fa58ef43c19a4253 *vignettes/miRNAss.Rnw

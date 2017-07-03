@@ -46,7 +46,7 @@ pre-miRNAs from other groups of sequences; it automatically optimizes the
 threshold that defines the classes boundaries, and thus, it is robust to high
 class imbalance. Each step of the method is scalable and can handle large
 volumes of data.
-The last version of the package can be found at Bioconductor. Also, the
+The last version of the package can be found at CRAN. Also, the
 development version of the package can be found at:
 \url{https://github.com/cyones/miRNAss}.
 Related projects can be found in \url{http://fich.unl.edu.ar/sinc/}
@@ -69,38 +69,30 @@ Milone, D. H. (2015). miRNAfe: A comprehensive tool for feature extraction in
 microRNA prediction. \textit{Biosystems}, \textbf{138}, 1-5.}.
 
 
-\section{Usage}
+\section{How to use miRNAss}
 After install the package, load miRNAss with the following command:
 
 <<loadPackages,results=hide>>=
 library('miRNAss')
 @
 
-The following command is the simplest way to execute miRNAss:
+\noindent The following command is the simplest way to execute miRNAss:
 
 <<loadPackages,eval=FALSE>>=
 miRNAss(features, labels)
 @
 
-Where:
+\noindent Where:
 \begin{itemize}
 \item \textbf{features}: is a data frame with the features extracted from
 hairpyn sequences, one sequence per row and one numeric feature per column.
-The hairpin sequences can be extracted from a raw genome using HExtractor
-(\url{https://sourceforge.net/projects/sourcesinc/files/hextractor/}),
-and the features can be calculated using miRNAfe
-(\url{https://sourceforge.net/projects/sourcesinc/files/mirnafe/} or
-\url{http://fich.unl.edu.ar/sinc/blog/web-demo/mirnafe-full/}). The whole
-pipeline consist on extract the hairpins from a raw genome in fasta format.
-The output, also in fasta format is the input to miRNAfe, which as result gives
-a comma separate file that can be easily load into R.
 \item \textbf{labels}: is a numeric vector where the i-th element has a value
 of 1 if it is a well-known pre-miRNA, a -1 if it is not a pre-miRNA, and zero
 if it is an unknown sequence that has to be classified (predicted) by
 the method.
 \end{itemize}
 
-The data provided with the package can be used to test miRNAss. This small
+\noindent The data provided with the package can be used to test miRNAss. This small
 dataset is composed of a small set of features extracted from 1000 hairpins
 randomly extracted from C. elegans hairpins. To use miRNAss with this dataset,
 first construct the label vector with the CLASS column
@@ -109,30 +101,37 @@ first construct the label vector with the CLASS column
 y = as.numeric(celegans$CLASS)*2 - 1
 @
 
-Remove some labels to make a test
+\noindent Remove some labels to make a test
 <<sampleY>>=
 y[sample(which(y > 0),200)] = 0
 y[sample(which(y < 0),700)] = 0
 @
 
-Take all the features but remove the label column
+\noindent Take all the features but remove the label column
 <<removeLabels>>=
 x = subset(celegans, select = -CLASS)
 @
 
-Call miRNAss with default parameters
+\noindent Call miRNAss with default parameters
 <<miRNAssCall>>=
 p = miRNAss(x,y)
 @
 
-Calculate some performance measures
+\noindent To get the indexes of the sequences that were predicted as possible
+pre-miRNA
+<<predictions,results=hide>>=
+is.miRNA = which(p > 0)
+@
+
+\noindent If the true labels are known, some performance measures can be
+calculated
 <<performance>>=
 SE = mean(p[ celegans$CLASS & y == 0] > 0)
 SP = mean(p[!celegans$CLASS & y == 0] < 0)
 cat('Sensitivity: ', SE, '\nSpecificity: ', SP, '\n')
 @
 
-For more help about all the parameters and a full example execute:
+\noindent For more help about all the parameters execute:
 <<loadPackages,results=hide>>=
 help(miRNAss)
 @
@@ -144,15 +143,15 @@ miRNAss-experiments.zip that can be found in:
 
 \url{https://sourceforge.net/projects/sourcesinc/files/mirnass/}
 
-To run these tests, after unzip the file, set this directory as the working
+\noindent To run these tests, after unzip the file, set this directory as the working
 directory and simply run each script with the function 'source':
 
 <<loadPackages,eval=FALSE>>=
 setwd('experiment_scripts')
-source('2_delta-mirBase.R')
+source('2-delta_mirBase.R')
 @
 
-This will generate one csv file for each test in the 'results' folder. It is
+\noindent This will generate one csv file for each test in the 'results' folder. It is
 important to point that most of these experiments are computationally expensive
 and could take quite a while (about 40 minutes for the experiment
 2 in an intel i7 PC). You can plot the results executing:
@@ -161,7 +160,7 @@ and could take quite a while (about 40 minutes for the experiment
 source('plotResults.R')
 @
 
-The figures will be saved in the folder 'results'.
+\noindent The figures will be saved in the folder 'results'.
 
 \section{Software used}
 

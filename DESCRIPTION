@@ -1,7 +1,7 @@
 Package: miRNAss
 Type: Package
 Title: Genome-Wide Discovery of Pre-miRNAs with few Labeled Examples
-Version: 1.1
+Version: 1.2
 Author: Cristian Yones
 Maintainer: Cristian Yones <cyones@sinc.unl.edu.ar>
 Description: Machine learning method specifically designed for
@@ -21,6 +21,6 @@ Imports: Matrix, stats, Rcpp, CORElearn, RSpectra,
 LinkingTo: Rcpp
 NeedsCompilation: yes
 RoxygenNote: 6.0.1
-Packaged: 2017-06-26 20:18:58 UTC; cyones
+Packaged: 2017-07-03 17:36:57 UTC; cyones
 Repository: CRAN
-Date/Publication: 2017-06-26 22:21:38 UTC
+Date/Publication: 2017-07-03 22:19:26 UTC

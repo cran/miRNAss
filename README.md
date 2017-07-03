@@ -1,4 +1,4 @@
-This is the version 1.1 of the miRNAss R package
+This is the version 1.2 of the miRNAss R package
 -------------------------------------------------
 MiRNAss is a machine learning method specifically designed for pre-miRNA prediction. It takes advantage of unlabeled sequences to improve the prediction rates even when there are just a few positive examples, and when the negative examples are unreliable or are not good representatives of its class. Furthermore, the method can automatically search for negative examples if the user is unable to provide them. MiRNAss can find a good boundary to divide the pre-miRNAs from other groups of sequences; it automatically optimizes the threshold that defines the classes boundaries, and thus, it is robust to high class imbalance. Each step of the method is scalable and can handle large volumes of data.
 
@@ -49,7 +49,7 @@ Datasets and test scripts
 -------------------------
 Once installed the package, a set of experiments and comparisons with other methods can be done. The scripts and the data of these experiments can be found in:
 
-http://sourceforge.net/projects/sourcesinc/files/mirnass/experiment_scripts.zip
+http://sourceforge.net/projects/sourcesinc/files/mirnass/miRNAss-experiments.zip
 
 To run these tests, after unzip the file, set this directory as the working directory and simply run each script with the function "source":
 
