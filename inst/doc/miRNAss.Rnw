@@ -147,7 +147,7 @@ miRNAss-experiments.zip that can be found in:
 directory and simply run each script with the function 'source':
 
 <<loadPackages,eval=FALSE>>=
-setwd('experiment_scripts')
+setwd('miRNAss-experiments')
 source('2-delta_mirBase.R')
 @
 

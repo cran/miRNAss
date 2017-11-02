@@ -7,8 +7,8 @@
 miRNAss(sequenceFeatures = NULL, sequenceLabels, AdjMatrix = NULL,
   nNearestNeighbor = 10, missPenalization = 1, scallingMethod = "relief",
   thresholdObjective = "Gm", neg2label = 0.05, positiveProp = NULL,
-  nEigenVectors = min(400, round(length(sequenceLabels)/5)),
-  threadNumber = NA)
+  eigenVectors = NULL, nEigenVectors = min(400,
+  round(length(sequenceLabels)/5)), threadNumber = NA)
 }
 \arguments{
 \item{sequenceFeatures}{Data frame with features extracted from stem-loop
@@ -47,6 +47,11 @@ The default is 0.05.}
 \item{positiveProp}{Expected proportion of positive sequences. If it is not
 provided by the user, is estimated as sum(y > 0) / sum(y != 0) when there
 are negative examples or as 2 * sum(y > 0) / sum(y == 0) when not.}
+
+\item{eigenVectors}{Eigen decomposition of the Laplacian matrix, as returned
+by the function eigenDecomposition. If is not provided is calculated
+internally (this parameter allows to calculate the eigen vectors once and then
+run several times miRNAss with the same eigen vectors).}
 
 \item{nEigenVectors}{Number of eigen vectors used to aproximate the solution
 of the optimization problem. If the number is too low, smoother topographic

@@ -61,7 +61,7 @@ help(miRNAss)
 ###################################################
 ### code chunk number 10: loadPackages (eval = FALSE)
 ###################################################
-## setwd('experiment_scripts')
+## setwd('miRNAss-experiments')
 ## source('2-delta_mirBase.R')
 
 

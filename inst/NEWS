@@ -24,3 +24,5 @@ News for package miRNAss
     + Pre-computed adjacency matrix can be provided as parameter.
 * Changes in miRNAss 1.2 (2017-07-03)
     + Minor corrections.
+* Changes in miRNAss 1.3 (2017-11-01)
+    + Added to parameters to the main function: AdjMatrix and eigenVectors that allows to calculate the adjacency matrix and the eigen vectors outside the main function once, and the run miRNAss in very short times. This is very useful for hyperparameter optimizations for example.

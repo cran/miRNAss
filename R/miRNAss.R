@@ -13,6 +13,10 @@
 #'  sequences (the ones that would be classificated).
 #' @param AdjMatrix Sparse adjacency matrix representeing the graph.
 #' If sequence features are provided it is ignored.
+#' @param eigenVectors Eigen decomposition of the Laplacian matrix, as returned
+#' by the function eigenDecomposition. If is not provided is calculated
+#' internally (this parameter allows to calculate the eigen vectors once and then
+#' run several times miRNAss with the same eigen vectors).
 #' @param nEigenVectors Number of eigen vectors used to aproximate the solution
 #' of the optimization problem. If the number is too low, smoother topographic
 #' solutions are founded, probabily losing SP but achieving a better SE.
@@ -69,14 +73,13 @@
 #' @import Matrix
 #' @importFrom stats var
 #' @importFrom CORElearn attrEval
-#' @importFrom RSpectra eigs_sym eigs
 #' @importFrom Rcpp evalCpp
 #' @useDynLib miRNAss
 #' @export
 miRNAss =  function(sequenceFeatures = NULL, sequenceLabels, AdjMatrix = NULL,
                     nNearestNeighbor = 10, missPenalization = 1,
                     scallingMethod = "relief", thresholdObjective = "Gm",
-                    neg2label = 0.05, positiveProp = NULL,
+                    neg2label = 0.05, positiveProp = NULL, eigenVectors = NULL,
                     nEigenVectors = min(400, round(length(sequenceLabels) / 5)),
                     threadNumber = NA) {
     nx <- length(sequenceLabels)
@@ -110,14 +113,16 @@ miRNAss =  function(sequenceFeatures = NULL, sequenceLabels, AdjMatrix = NULL,
             stop("Invalid scalling method")
         }
 
-        AdjMatrix <- .adjacencyMatrixKNN(x = sequenceFeatures,
-                                         y = sequenceLabels,
-                                         nn = nNearestNeighbor,
-                                         threadNumber = threadNumber)
+        AdjMatrix <- adjacencyMatrixKNN(sequenceFeatures = sequenceFeatures,
+                                        sequenceLabels = sequenceLabels,
+                                        nNearestNeighbor = nNearestNeighbor,
+                                        threadNumber = threadNumber)
     } else if (is.null(AdjMatrix))
         stop("Either sequenceFeatures or AdjMatrix must be provided.")
 
-    eigenVectors <- .eigenDecom(AdjMatrix, nEigenVectors)
+    if (is.null(eigenVectors))
+        eigenVectors <- eigenDecomposition(AdjMatrix, nEigenVectors)
+
 
     if (!any(sequenceLabels < 0))
         sequenceLabels <- .searchNegatives(A = AdjMatrix,
@@ -157,27 +162,6 @@ miRNAss =  function(sequenceFeatures = NULL, sequenceLabels, AdjMatrix = NULL,
     return(y)
 }
 
-.eigenDecom <- function(A, nev) {
-    nx <- nrow(A)
-    D  <-   sparseMatrix(i = seq(1, nx),
-                         j = seq(1, nx),
-                         x = 1 / sqrt(colSums(A)))
-    Lnorm <- sparseMatrix(   i = seq(1, nx),
-                             j = seq(1, nx),
-                             x = rep(1, nx)) - D %*% A %*% D
-
-    lambda <- eigs_sym(
-        A = Lnorm,
-        k = nev + 1,
-        which = "SM",
-        opts = list(tol = 1e-6)
-    )
-
-    U <- lambda$vectors[, seq(nev, 1, -1)]
-    D <- lambda$values[seq(nev, 1, -1)]
-    return(list(U = U, D = D))
-}
-
 .solveOptim <- function(desc, y, posFrac, missWeight) {
     nx <- length(y)
     posl <- which(y > 0)
@@ -212,23 +196,6 @@ miRNAss =  function(sequenceFeatures = NULL, sequenceLabels, AdjMatrix = NULL,
 
     w <- solve(G - diag(lambda, nrow(G), ncol(G)), b)
     return(desc$U %*% w)
-}
-
-.adjacencyMatrixKNN <- function(x, y = rep(0, nrow(x)), nn, threadNumber) {
-    if (!is.matrix(x))
-        x <- as.matrix(x)
-    if (is.na(threadNumber))
-        threadNumber <- 0
-    el <- .edgeListKnn(x, y, nn, threadNumber)
-    res <- sparseMatrix(
-        i = c(el[, 1], el[, 2]),
-        j = c(el[, 2], el[, 1]),
-        x = c(el[, 3], el[, 3]),
-        use.last.ij = TRUE,
-        symmetric = FALSE,
-        dims = c(nrow(x), nrow(x))
-    )
-    return(res)
 }
 
 .reliefScalling <- function(x, y, nn) {
