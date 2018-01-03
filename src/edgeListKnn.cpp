@@ -3,7 +3,7 @@
 #include <vector>
 #include <cmath>
 
-#ifndef __APPLE__
+#if defined _OPENMP && !defined __APPLE__
 #include <omp.h>
 // [[Rcpp::plugins(openmp)]]
 #endif
@@ -27,8 +27,7 @@ NumericMatrix edgeListKnn(const NumericMatrix& x, const NumericVector& y,
 	}
 	std::vector<double> Y = as< std::vector<double> >(y);
 
-
-#ifndef __APPLE__
+#if defined _OPENMP && !defined __APPLE__
 	if(threadNumber > 0)
 	    omp_set_num_threads(threadNumber);
 #endif
@@ -116,7 +115,7 @@ NumericMatrix edge_list_knn(const matrix& x, const std::vector<double>& y,
 #pragma omp parallel shared(all)
 {
 
-#ifndef __APPLE__
+#if defined _OPENMP && !defined __APPLE__
 	std::vector<edge> e(nn*nrow/omp_get_num_threads() + nn*nrow);
 #else
 	std::vector<edge> e(2*nn*nrow);

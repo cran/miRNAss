@@ -26,3 +26,5 @@ News for package miRNAss
     + Minor corrections.
 * Changes in miRNAss 1.3 (2017-11-01)
     + Added to parameters to the main function: AdjMatrix and eigenVectors that allows to calculate the adjacency matrix and the eigen vectors outside the main function once, and the run miRNAss in very short times. This is very useful for hyperparameter optimizations for example.
+* Changes in miRNAss 1.4 (2018-01-02)
+    + Solved problem with OpenMP in Mac Os.

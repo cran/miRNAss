@@ -1,4 +1,4 @@
-ed807a9e00a784a344fd46f75c652367 *DESCRIPTION
+d545a3e45f14a2c8aa8f812842919876 *DESCRIPTION
 9d3d29bf5a6f269d56f0ec447a358f25 *NAMESPACE
 04d8116993757e035d643967cb288691 *R/RcppExports.R
 146b822f9a1b59409b827339fc6c786a *R/adjacencyMatrixKNN.R
@@ -8,10 +8,10 @@ e9e7259fa059070235cfa47692b612d0 *R/miRNAss.R
 4b86ecb894fc2c1f4e1c1558275eeddc *README.md
 6c249055ea1a5f8997c9c35dc0f1ac35 *build/vignette.rds
 40c01684943401d9011abd47d16b4efe *data/celegans.rda
-0b207994554a3172d58aee994c6f28dc *inst/NEWS
+d3b9234708a4459490359214917cda5c *inst/NEWS
 3ed4ce4e074bbffc2d29a3b212af6b80 *inst/doc/miRNAss.R
 855b82ebeb53dead75f6c03f26a537bf *inst/doc/miRNAss.Rnw
-d08f52ec8aabe6cae587669ff7858e8e *inst/doc/miRNAss.pdf
+943a1aac83c23f48431a0b6237c11e5f *inst/doc/miRNAss.pdf
 801f822c8856ddae2703d303e6cb7151 *man/adjacencyMatrixKNN.Rd
 5ba125b3bf521c998a9ca8b2daaf456c *man/celegans.Rd
 e6025410d0128bfea644bdb694bc4e56 *man/eigenDecomposition.Rd
@@ -20,6 +20,6 @@ e6025410d0128bfea644bdb694bc4e56 *man/eigenDecomposition.Rd
 4569350a33845560f8060cb1a687a8c7 *src/RcppExports.cpp
 bfaf77b8543596eeb01a745de06d1ffa *src/calcDistance.cpp
 28c8b721b3f00abdf2ba7f9324f03697 *src/calcThreshold.cpp
-93fbc00859acc7adf580ff99930f0861 *src/edgeListKnn.cpp
+a9330a61ffb79bda491839033abdf200 *src/edgeListKnn.cpp
 53c4cced3647872ee929f17e8a40c163 *src/miRNAss_init.c
 855b82ebeb53dead75f6c03f26a537bf *vignettes/miRNAss.Rnw
