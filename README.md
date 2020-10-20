@@ -2,8 +2,6 @@ This is the version 1.2 of the miRNAss R package
 -------------------------------------------------
 MiRNAss is a machine learning method specifically designed for pre-miRNA prediction. It takes advantage of unlabeled sequences to improve the prediction rates even when there are just a few positive examples, and when the negative examples are unreliable or are not good representatives of its class. Furthermore, the method can automatically search for negative examples if the user is unable to provide them. MiRNAss can find a good boundary to divide the pre-miRNAs from other groups of sequences; it automatically optimizes the threshold that defines the classes boundaries, and thus, it is robust to high class imbalance. Each step of the method is scalable and can handle large volumes of data.
 
-The last version of the package can be found at: http://sourceforge.net/projects/sourcesinc/files/mirnass/
-
 Contact
 - Cristian Yones <cyones(at)sinc.unl.edu.ar>
 - sinc(i):  http://fich.unl.edu.ar/sinc/
